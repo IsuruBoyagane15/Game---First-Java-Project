@@ -49,12 +49,14 @@ public class SuperWarrior extends Warrior {
     @Override
     public void swim() throws InterruptedException{
         if (this.binocular.scanPositions() != null && this.isMortal){
-            if (this.myGame.canMoveWarrior(this.binocular.scanPositions()) && this.myGame.checkPosition(this.binocular.scanPositions())){
-                this.setPosition(this.binocular.scanPositions());
-                this.myGame.getInvolved(this);
-            }
-            else{
-                swim();
+            synchronized (this.binocular.scanPositions()) {
+                if (this.myGame.canMoveWarrior(this.binocular.scanPositions())) {
+                    this.setPosition(this.binocular.scanPositions());
+                    System.out.println(this.getName() + " moved to " + this.getPosition());
+                    this.myGame.getInvolved(this);
+                } else {
+                    swim();
+                }
             }
         }
         else{

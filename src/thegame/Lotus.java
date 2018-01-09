@@ -45,7 +45,7 @@ public class Lotus extends GameObject implements Involvable {
     }
 
     /**
-     * This method is used to get the identity of a warrior
+     * This method is used to get the identity of a lotus
      *
      * @return int identity od a warrior
      */

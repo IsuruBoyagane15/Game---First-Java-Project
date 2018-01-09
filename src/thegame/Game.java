@@ -8,6 +8,9 @@ package thegame;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  *
@@ -23,8 +26,9 @@ public class Game {
     private  ArrayList <KillerFish> listOfKillerFish;
     private  ArrayList <RubberEaterFish> listOfREFish;
     private  ArrayList <Fish> listOfInocentFish;
-    private  TreasureChest treasureChest;
+    private TreasureChest treasureChest;
     private long startTime;
+
     
     /**
     * 
@@ -49,8 +53,7 @@ public class Game {
         Scanner sc = new Scanner(System.in);
         
         Lake lake = new Lake();
-        TreasureChest treasureChest = new TreasureChest(new GridPosition(5,5));
-        this.treasureChest = treasureChest;
+        this.treasureChest = new TreasureChest(new GridPosition(5, 5), this);
         System.out.println("TREASURE CHEST IS LOCATED AT (5,5) LOCATION\n");
         listOfObjects.add(treasureChest);
         grid.getGrid().put(treasureChest.getPosition(),treasureChest);
@@ -232,7 +235,7 @@ public class Game {
         }
         return null;
     }
-    
+
     /**
      * this method check whether a warrior is occupied on the target position
      * @param targetPosition position that warrior suppose to move
@@ -245,10 +248,11 @@ public class Game {
             }
             else if (warrior == listOfWarriors.get(listOfWarriors.size()-1)){
                 return true;
-            }  
+            }
         }
         return false;
     }
+
 
     /**
      *This method decides whether any warrior can move anymore or not
@@ -263,7 +267,29 @@ public class Game {
         }
         return false;
     }
-    
+
+    /**
+     * This method is used to display and save results
+     *
+     * @param result result taken from treasure chest
+     */
+    public void displayResult(Result result) {
+        System.out.println("\n" + result.getWinner().getName() + " won the game in " + (result.getFinishingTime() - startTime) / 1000.0 + " seconds...!");
+        String file = "results.txt";
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write("---RESULTS---");
+            bufferedWriter.newLine();
+            bufferedWriter.write(result.getWinner().getName() + " won the game in " + (result.getFinishingTime() - startTime) / 1000.0 + " seconds...!");
+            bufferedWriter.close();
+
+        } catch (IOException ex) {
+            System.out.println("WRITING TO PERMENENT STORAGE IS FAILED...!");
+        }
+
+    }
+
     /**
      * This method let warriors to play the game by starting different threads & keep game on until a proper result comes
      */
@@ -271,26 +297,24 @@ public class Game {
         System.out.println("          --- GAME IS ON ---");
         this.initiateObjects();
         //clock of the game starts here
-        long startTime = System.currentTimeMillis();
-        this.treasureChest.setStartTime(startTime);
+        this.startTime = System.currentTimeMillis();
         for (Warrior warrior : listOfWarriors){
             //starting warrior threads one by one
             Thread thread = new Thread(warrior);
             thread.start();
             //notify the treasure chest that a warrior started moving
             treasureChest.addListener(warrior);
+
         }
 
-        //this block keep the game on in the main thread until a warrior find the chest or all warriors are immobile
+        //this block keep the game on in the main thread until a warrior find the chest or all warriors become immobile
         while (AreWarriorsMobile() && treasureChest.isFound() == false){
             continue;
         }
         //if all warriors are immobile terminate the game
         if (AreWarriorsMobile() == false) {
-            System.out.println("       ---NO WARRIOR REACHED THE CHEST---\n           GAME OVER...!");
+            System.out.println("---NO WARRIOR REACHED THE CHEST---\n         GAME OVER...!");
         }
-
-
     }
 
 }
