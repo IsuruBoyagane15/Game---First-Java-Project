@@ -11,18 +11,18 @@ package thegame;
  * The class of super warriors which inherit from warrior class
  */
 public class SuperWarrior extends Warrior {
-    
+
     private Binocular binocular;
-    
+
     /**
      * constructor
-     * 
+     *
      * @param position initial grid location of the super warrior
      * @param name  of a super warrior
      * @param myGame the game which super warrior plays
      */
-    public SuperWarrior(GridPosition position,String name,Game myGame){
-        super(position,name,myGame);
+    public SuperWarrior(GridPosition position, String name, Game myGame){
+        super(position,name, myGame);
         binocular = new Binocular(this);
     }
 
@@ -41,7 +41,7 @@ public class SuperWarrior extends Warrior {
     public void sleep(){
         System.out.println("SUPERWARRIOR SLEEPS...!");
     }
-	
+
     /**
      * Overridden swim method
      * Super warrior scan for lotus using his binocular and if there are no lotus in the vicinity he swims like a normal warrior
@@ -52,9 +52,10 @@ public class SuperWarrior extends Warrior {
             synchronized (this.binocular.scanPositions()) {
                 if (this.myGame.canMoveWarrior(this.binocular.scanPositions())) {
                     this.setPosition(this.binocular.scanPositions());
-                    System.out.println(this.getName() + " moved to " + this.getPosition());
+                    System.out.println(this.getName() + " moved to " +this.getPosition());
                     this.myGame.getInvolved(this);
-                } else {
+                }
+                else {
                     swim();
                 }
             }
@@ -63,5 +64,5 @@ public class SuperWarrior extends Warrior {
             super.swim();
         }
     }
-	
+
 }

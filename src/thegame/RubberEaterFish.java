@@ -40,6 +40,4 @@ public class RubberEaterFish extends Fish implements Involvable{
         System.out.println("\nFish on " + this.getPosition() + " ate " + warrior.getName() + "'s fins...!");
         System.out.println(warrior.getName() + " cannot swim anymore ...!\n");
     }
-    
-   
 }

@@ -31,7 +31,7 @@ public class Warrior extends GameObject implements Runnable{
     *@param myGame the game which warrior plays
     *
     */
-    public Warrior(GridPosition position,String name,Game myGame){
+    public Warrior(GridPosition position, String name, Game myGame){
         super(position);
 	    this.name = name;
 	    this.isAlive = true;
@@ -194,6 +194,4 @@ public class Warrior extends GameObject implements Runnable{
     public void setAlive(boolean isAlive){
         this.isAlive = isAlive;
     }
-
-
 }
